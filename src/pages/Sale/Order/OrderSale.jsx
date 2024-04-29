@@ -1,16 +1,27 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersAPI } from "../../../redux/reducers/OrderReducer";
-import { NavLink } from "react-router-dom";
+import { deleteOrderAPI, getAllOrdersAPI } from "../../../redux/reducers/OrderReducer";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import style from "./OrderSale.module.css";
+import { setComponentsAction } from "../../../redux/reducers/FunctionPopupReducer";
+import { Dropdown, Popconfirm } from "antd";
 
 export default function OrderSale(props) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { orderList } = useSelector((state) => state.OrderReducer);
 
   useEffect(() => {
+    let Components = [
+      {
+        tooltip: "Add new order",
+        icon: `<i className="fas fa-plus" />`,
+        contentComponentType: "FormAddOrder",
+      },
+    ];
+    dispatch(setComponentsAction(Components));
     // Get all orders
     dispatch(getAllOrdersAPI());
   }, []);
@@ -20,57 +31,89 @@ export default function OrderSale(props) {
       {orderList.map((order, index) => {
         return (
           <div key={index} className={style.orderCard}>
-            <div className="flex justify-between mb-2">
-              <div>
-                <p>
-                  Order ID: <span className="font-semibold">{order.id}</span>
-                </p>
-                <p>
-                  Total Price:{" "}
-                  <span className="font-semibold">{order.total_price}</span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  Customer Name:{" "}
-                  <span className="font-semibold">{order.customer_name}</span>
-                </p>
-                <p>
-                  Status: <span className="font-semibold">{order.status}</span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  Order Date:{" "}
-                  <span className="font-semibold">{order.created_date}</span>
-                </p>
-                <p>
-                  Payment Method:{" "}
-                  <span className="font-semibold">{order.payment_method}</span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  Deadline:{" "}
-                  <span className="font-semibold">{order.deadline}</span>
-                </p>
-                <p>
-                  Delivery Method:{" "}
-                  <span className="font-semibold">{order.delivery_method}</span>
-                </p>
-              </div>
-            </div>
-            <div className="text-end">
-              <NavLink
-                className="no-underline text-blue-500 hover:text-blue-700"
-                to={`${order.id}`}
-                onClick={() => {
-                  // Get order details
-                  // dispatch(getOrderDetailsAPI(order.id));
+            <div className="text-end mb-2">
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "delete",
+                      title: "Delete",
+                      label: (
+                        <Popconfirm
+                          title="Are you sure to delete this order?"
+                          onConfirm={() => {
+                            dispatch(deleteOrderAPI(order.id));
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          Delete
+                        </Popconfirm>
+                      ),
+                    },
+                    {
+                      key: "details",
+                      title: "See details",
+                      label: "Details",
+                      onClick: () => {
+                        navigate(`${order.id}`);
+                        // Get order details
+                        // dispatch(getOrderDetailsAPI(order.id));
+                      },
+                    },
+                  ],
                 }}
               >
-                Details
-              </NavLink>
+                <i className="fas fa-ellipsis"></i>
+              </Dropdown>
+            </div>
+            <div className="grid grid-cols-2">
+              <div>
+                <p>
+                  <span className="font-semibold">
+                    Order ID:</span> {order.id}
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Total Price:</span>{" "}
+                  {order.total_price} $
+                </p>
+              </div>
+              <div>
+                <p>
+                  <span className="font-semibold">
+                    Customer Name:</span>{" "}
+                  {order.customer_name}
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Status:</span> {order.status}
+                </p>
+              </div>
+              <div>
+                <p>
+                  <span className="font-semibold">
+                    Order Date:</span>{" "}
+                  {order.created_date}
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Payment Method:</span>{" "}
+                  {order.payment_method}
+                </p>
+              </div>
+              <div>
+                <p>
+                  <span className="font-semibold">
+                    Deadline:</span>{" "}
+                  {order.deadline}
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Delivery Method:</span>{" "}
+                  {order.delivery_method}
+                </p>
+              </div>
             </div>
           </div>
         );

@@ -14,6 +14,7 @@ import OrderReducer from "./reducers/OrderReducer";
 import DataAccess from "./reducers/DataAccess";
 import ProductionReducer from "./reducers/ProductionReducer";
 import DeliveriesReducer from "./reducers/DeliveriesReducer";
+import SalaryReducer from "./reducers/SalaryReducer";
 
 export const store = configureStore({
   reducer: {
@@ -33,5 +34,6 @@ export const store = configureStore({
     DataAccess: DataAccess,
     ProductionReducer: ProductionReducer,
     DeliveriesReducer: DeliveriesReducer,
+    SalaryReducer: SalaryReducer,
   },
 });

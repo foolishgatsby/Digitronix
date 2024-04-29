@@ -19,12 +19,12 @@ export default function CustomerAdmin(props) {
 
   useEffect(() => {
     let Component = [
-      {
-        tooltip: "Favourite Customer",
-        icon: `<i className="fa-solid fa-heart" />`,
-        contentComponentType: "FavoriteCustomer",
-        isFilterFunction: true,
-      },
+      // {
+      //   tooltip: "Favourite Customer",
+      //   icon: `<i className="fa-solid fa-heart" />`,
+      //   contentComponentType: "FavoriteCustomer",
+      //   isFilterFunction: true,
+      // },
       {
         tooltip: "Add Customer",
         icon: `<i className="fa-solid fa-plus" />`,

@@ -145,28 +145,6 @@ export default function SaleTemplate(prosp) {
               {collapsed ? "" : "Customer"}
             </NavLink>
           </div>
-          <div
-            style={{
-              width: "100%",
-              height: "50px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <NavLink
-              to="deliveries"
-              className={({ isActive }) => {
-                return isActive ? "active" : "";
-              }}
-              style={({ isActive }) => activeStyle(isActive, collapsed)}
-            >
-              <i
-                className="fa fa-truck"
-                style={{ marginRight: "6px", fontSize: "20px" }}
-              />{" "}
-              {collapsed ? "" : "Deliveries"}
-            </NavLink>
-          </div>
         </div>
       </Sider>
       <Layout style={{ marginLeft: 50 }}>

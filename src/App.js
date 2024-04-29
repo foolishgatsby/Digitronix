@@ -15,7 +15,6 @@ import SaleTemplate from "./templates/SaleTemplates/SaleTemplate";
 import ProductSale from "./pages/Sale/Product/ProductSale";
 import OrderSale from "./pages/Sale/Order/OrderSale";
 import CustomerSale from "./pages/Sale/Customer/CustomerSale";
-import DeliverySale from "./pages/Sale/Delivery/DeliverySale";
 import WarehouseTemplates from "./templates/WarehouseTemplates/WarehouseTemplates";
 import ProductWarehouse from "./pages/Warehouse/Product/ProductWarehouse";
 import ModalComponent from "./HOC/ModalComponent/ModalComponent";
@@ -29,6 +28,7 @@ import CustomerDetails from "./pages/Admin/Customer/CustomerDetails/CustomerDeta
 import OrderDetails from "./pages/Admin/Order/OrderDetails/OrderDetails";
 import MaterialWarehouse from "./pages/Warehouse/Material/MaterialWarehouse";
 import ProductionDetailAdmin from "./pages/Admin/ProductionDetail/ProductionDetailAdmin";
+import SalaryInformation from "./pages/Admin/SalaryInformation/SalaryInformation";
 
 function App() {
   return (
@@ -39,6 +39,7 @@ function App() {
         <Route path="" element={<Login />} />
         <Route path="admin" element={<AdminTemplate />}>
           <Route path="accounts" element={<AccountAdmin />} />
+          <Route path="accounts/salary" element={<SalaryInformation />} />
           <Route path="warehouse">
             <Route
               index
@@ -73,13 +74,11 @@ function App() {
           ></Route>
         </Route>
         <Route path="sale" element={<SaleTemplate />}>
-          {/* Products Sale === Products Admin */}
           <Route path="products" element={<ProductSale />}></Route>
           <Route path="orders" element={<OrderSale />}></Route>
           <Route path="orders/:id" element={<OrderDetails />}></Route>
           <Route path="customers" element={<CustomerSale />}></Route>
           <Route path="customers/:id" element={<CustomerDetails />}></Route>
-          <Route path="deliveries" element={<DeliverySale />}></Route>
         </Route>
         <Route path="warehouse" element={<WarehouseTemplates />}>
           <Route path="products" element={<ProductWarehouse />}></Route>
