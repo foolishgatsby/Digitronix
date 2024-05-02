@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathList } from "../../utils/Hooks/usePathList";
 import { Breadcrumb, Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import { NotificationFilled, WechatOutlined } from "@ant-design/icons";
 import Clock from "../../components/Clock/Clock";
 import FunctionPopup from "../../components/FunctionPopup/FunctionPopup";
+import { useDispatch, useSelector } from "react-redux";
+import { ROLE } from "../../utils/constants/settingSystem";
 
 const activeStyle = (isActive, collapse) => {
   return {
@@ -23,9 +25,27 @@ const activeStyle = (isActive, collapse) => {
 };
 
 export default function WarehouseTemplates(props) {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [collapsed, setCollapsed] = useState(true);
 
   const pathItem = usePathList();
+
+  const { userLoginInfo } = useSelector((state) => state.LoginReducer);
+
+  useEffect(() => {
+    if (userLoginInfo.token === "" || userLoginInfo.token === undefined) {
+      alert("Please login first");
+      navigate("/");
+    } else {
+      if (userLoginInfo.roleId !== ROLE.WAREHOUSE.id) {
+        alert("You are not authorized to access this page");
+        navigate("/");
+      }
+    }
+  })
 
   return (
     <Layout style={{ minHeight: "100vh" }}>

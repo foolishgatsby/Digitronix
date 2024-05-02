@@ -26,6 +26,7 @@ import FormEditProduction from "../../components/Form/FormEditProduction";
 import FormAddProductionDetail from "../../components/Form/FormAddProductionDetail";
 import FormEditOrder from "../../components/Form/FormEditOrder";
 import FormAddDelivery from "../../components/Form/FormAddDelivery";
+import FormImportMaterial from "../../components/Form/FormImportMaterial";
 
 // mapping componet from component type
 const componentMapping = {
@@ -51,6 +52,7 @@ const componentMapping = {
   FormAddProductionDetail: FormAddProductionDetail,
   FormEditOrder: FormEditOrder,
   FormAddDelivery: FormAddDelivery,
+  FormImportMaterial: FormImportMaterial,
   // Add more mappings here if needed
 };
 

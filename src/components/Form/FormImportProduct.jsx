@@ -1,7 +1,7 @@
 import { Col, Form, Input, Row, Select } from "antd";
 import { withFormik } from "formik";
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useImperativeHandle } from "react";
+import { connect, useDispatch } from "react-redux";
 import {
   editProductApi,
   getAllProductNoPaging,
@@ -12,7 +12,7 @@ export const mapProductListToOption = (productList) => {
   return productList.map((product) => ({
     value: product.id,
     label: product.name,
-    quantyty: product.quantity,
+    quantity: product.quantity,
   }));
 };
 
@@ -58,7 +58,7 @@ function FormImportProduct(props) {
               onChange={(value, option) => {
                 setFieldValue("product_id", value);
                 setFieldValue("product_name", option.label);
-                setFieldValue("product_quantity_before", option.quantyty);
+                setFieldValue("product_quantity_before", option.quantity);
               }}
               options={mapProductListToOption(values.productList)}
             />

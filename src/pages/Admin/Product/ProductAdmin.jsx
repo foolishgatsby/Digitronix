@@ -1,22 +1,18 @@
 import { Button, Input, Select, Space, Table, Tag, Popconfirm } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import { setComponentsAction } from "../../../redux/reducers/FunctionPopupReducer";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProductApi,
-  getAllProductApi,
   getAllProductNoPaging,
-  setLimit,
-  setProductEdit,
 } from "../../../redux/reducers/ProductReducer";
 import { getAllCategoryApi } from "../../../redux/reducers/CategoryReducer";
 import { getAllTagsApi } from "../../../redux/reducers/TagsReducer";
-import { set, size } from "lodash";
+// import { set, size } from "lodash";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-import { render } from "@testing-library/react";
 import { getAllImportExportAPI } from "../../../redux/reducers/DataAccess";
 
 const mapCategoryListToOption = (categoryList) => {
@@ -199,7 +195,7 @@ export default function ProductAdmin(props) {
     },
   });
 
-  const { productList, page, limit, totalPage, loading } = useSelector(
+  const { productList, loading } = useSelector(
     (state) => state.ProductReducer
   );
 

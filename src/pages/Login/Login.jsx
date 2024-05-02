@@ -4,7 +4,8 @@ import Logo from "../../assets/img/Logo.png";
 import { loginApi } from "../../redux/reducers/LoginReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { TOKEN, USER_ROLE } from "../../utils/constants/settingSystem";
+import { ROLE } from "../../utils/constants/settingSystem";
+
 
 export default function Login(props) {
   const [userLogin, setUserLogin] = useState({
@@ -12,7 +13,7 @@ export default function Login(props) {
     password: "",
   });
 
-  const userLoginInfo = useSelector((state) => state.LoginReducer);
+  const { userLoginInfo } = useSelector((state) => state.LoginReducer);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,27 +34,24 @@ export default function Login(props) {
   };
 
   useEffect(() => {
-    if (localStorage.getItem(TOKEN) !== null) {
-      console.log(localStorage.getItem(USER_ROLE));
-      switch (localStorage.getItem(USER_ROLE)) {
-        case "1":
+    if (!userLoginInfo.token) {
+      navigate("/");
+    } else {
+      switch (userLoginInfo.roleId) {
+        case ROLE.DIRECTOR.id:
           navigate("/admin");
           break;
-        case "2":
-          break;
-        case "3":
+        case ROLE.WAREHOUSE.id:
           navigate("/warehouse");
           break;
-        case "4":
+        case ROLE.SALE.id:
           navigate("/sale");
-          break;
-        case "5":
           break;
         default:
           break;
       }
     }
-  }, [userLoginInfo]);
+  }, [userLoginInfo.token]);
 
   return (
     <div className="grid grid-cols-10 h-screen">
@@ -110,18 +108,7 @@ export default function Login(props) {
               />
             </div>
           </div>
-          <div className="text-sm flex justify-between">
-            <div className="remember flex items-center">
-              <input
-                className="me-1"
-                id="remember"
-                name="remember"
-                type="checkbox"
-              ></input>
-              <label htmlFor="remember" className="font-semibold">
-                Remember me
-              </label>
-            </div>
+          <div className="text-sm flex justify-end">
             <a
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500"

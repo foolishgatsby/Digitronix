@@ -1,11 +1,10 @@
 import { Button, Input, Select, Space, Table, Tag, Popconfirm } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import {
   deleteMaterialApi,
   getAllMaterialNoPaging,
-  getAllMetarialApi,
 } from "../../../redux/reducers/MaterialReducer";
 import { setComponentsAction } from "../../../redux/reducers/FunctionPopupReducer";
 import { getAllTagsApi } from "../../../redux/reducers/TagsReducer";
@@ -14,13 +13,13 @@ import { mapTagListToOption } from "../Product/ProductAdmin";
 import { NavLink } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { render } from "@testing-library/react";
+import { getAllImportExportMaterialAPI } from "../../../redux/reducers/DataAccess";
 
 export default function MaterialAdmin(props) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { materialList, page, limit, totalPage, loading } = useSelector(
+  const { materialList, loading } = useSelector(
     (state) => state.MaterialReducer
   );
 
@@ -31,9 +30,7 @@ export default function MaterialAdmin(props) {
   // tagList: list of tags
   const { tagList } = useSelector((state) => state.TagsReducer);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  const { importMaterialList, exportMaterialList, loadingImportExport } = useSelector((state) => state.DataAccess);
 
   const fetchMaterialData = () => {
     dispatch(getAllMaterialNoPaging());
@@ -284,98 +281,25 @@ export default function MaterialAdmin(props) {
       },
     },
   ];
-  const importData = [
-    {
-      key: "1",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 4000,
-    },
-    {
-      key: "2",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 2",
-      quantity: 12,
-    },
-    {
-      key: "3",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 3",
-      quantity: 120,
-    },
-    {
-      key: "4",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 120,
-    },
-    {
-      key: "5",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 200,
-    },
-    {
-      key: "6",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 2",
-      quantity: 200,
-    },
-  ];
-  const exportData = [
-    {
-      key: "1",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 4000,
-    },
-    {
-      key: "2",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 2",
-      quantity: 12,
-    },
-    {
-      key: "3",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 3",
-      quantity: 120,
-    },
-    {
-      key: "4",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 120,
-    },
-    {
-      key: "5",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 1",
-      quantity: 200,
-    },
-    {
-      key: "6",
-      time: "12 THG 3, 2024 9:20:21 AM",
-      productName: "Product 2",
-      quantity: 200,
-    },
-  ];
+
   const importExportColumns = [
     {
       title: "Time",
-      dataIndex: "time",
-      key: "time",
-      render: (text, record, index) => <p>{text}</p>,
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (text) => (
+        <p style={{ margin: 0 }}>{new Date(text).toLocaleString()}</p>
+      ),
     },
     {
-      title: "Name",
-      dataIndex: "productName",
-      key: "productName",
+      title: "Material Name",
+      dataIndex: "material_name",
+      key: "material_name",
     },
     {
       title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      dataIndex: "material_quantity",
+      key: "material_quantity",
     },
   ];
 
@@ -415,6 +339,7 @@ export default function MaterialAdmin(props) {
     dispatch(getAllCategoryMaterialApi());
     dispatch(getAllTagsApi());
     fetchMaterialData();
+    dispatch(getAllImportExportMaterialAPI());
   }, []);
 
   return (
@@ -435,13 +360,13 @@ export default function MaterialAdmin(props) {
           <h5>
             <i className="fas fa-history" /> Import history
           </h5>
-          <Table columns={importExportColumns} dataSource={importData} />
+          <Table columns={importExportColumns} dataSource={importMaterialList} />
         </div>
         <div className="col-span-1">
           <h5>
             <i className="fas fa-history" /> Export history
           </h5>
-          <Table columns={importExportColumns} dataSource={exportData} />
+          <Table columns={importExportColumns} dataSource={exportMaterialList} />
         </div>
       </div>
     </div>

@@ -79,8 +79,8 @@ export const getAllMaterialNoPaging = () => {
     } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
+  };
+};
 
 export const createMaterialApi = (data) => {
   return async (dispatch) => {
@@ -96,8 +96,8 @@ export const createMaterialApi = (data) => {
     } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
+  };
+};
 
 export const deleteMaterialApi = (id) => {
   return async (dispatch) => {
@@ -112,8 +112,8 @@ export const deleteMaterialApi = (id) => {
     } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
+  };
+};
 
 export const getMaterialByIdApi = (id) => {
   return async (dispatch) => {
@@ -122,12 +122,11 @@ export const getMaterialByIdApi = (id) => {
       if (result.status === STATUS_CODE.SUCCESS) {
         dispatch(setMaterialEdit(result.data));
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
+  };
+};
 
 export const uploadImageMaterialApi = (data) => {
   return async (dispatch) => {
@@ -139,15 +138,13 @@ export const uploadImageMaterialApi = (data) => {
         return {
           status: STATUS_CODE.SUCCESS,
           data: result.data,
-        }
+        };
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
-
+  };
+};
 
 export const editMaterialApi = (data) => {
   return async (dispatch) => {
@@ -157,12 +154,13 @@ export const editMaterialApi = (data) => {
       if (result.status === STATUS_CODE.SUCCESS) {
         alert("Edit material successfully!");
         dispatch(getMaterialByIdApi(data.id));
+        dispatch(getAllMaterialNoPaging());
       }
     } catch (error) {
       console.log("error", error);
     }
-  }
-}
+  };
+};
 
 export const assignTagToMaterialApi = (data) => {
   return async (dispatch) => {
@@ -174,5 +172,5 @@ export const assignTagToMaterialApi = (data) => {
     } catch (error) {
       console.log("error", error.response.data);
     }
-  }
-}
+  };
+};

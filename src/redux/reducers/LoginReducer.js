@@ -53,3 +53,14 @@ export const loginApi = (userLogin) => {
     }
   };
 };
+
+export const logoutApi = () => {
+  return async (dispatch) => {
+    try {
+      localStorage.clear();
+      dispatch(setUserInfoAction({}));
+    } catch (error) {
+      console.log("error", error.response.data);
+    }
+  };
+};

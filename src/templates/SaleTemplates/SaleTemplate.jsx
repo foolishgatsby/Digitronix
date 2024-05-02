@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // antd
 import { Breadcrumb, Flex, Layout, Menu, theme } from "antd";
 import { NotificationFilled, WechatOutlined } from "@ant-design/icons";
-import { Outlet, useLocation, useMatch } from "react-router-dom";
+import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import Clock from "../../components/Clock/Clock";
 import { usePathList } from "../../utils/Hooks/usePathList";
 import FunctionPopup from "../../components/FunctionPopup/FunctionPopup";
+import { useDispatch, useSelector } from "react-redux";
+import { ROLE } from "../../utils/constants/settingSystem";
+import { logoutApi } from "../../redux/reducers/LoginReducer";
 const { Header, Content, Footer, Sider } = Layout;
 
 const activeStyle = (isActive, collapse) => {
@@ -25,9 +28,26 @@ const activeStyle = (isActive, collapse) => {
 };
 
 export default function SaleTemplate(prosp) {
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(true);
 
+  const { userLoginInfo } = useSelector((state) => state.LoginReducer)
+
   const pathItem = usePathList();
+
+  useEffect(() => {
+    if (userLoginInfo.token === "" || userLoginInfo.token === undefined) {
+      alert("Please login first");
+      navigate("/");
+    }
+    else {
+      if (userLoginInfo.roleId !== ROLE.SALE.id) {
+        alert("You are not authorized to access this page");
+        navigate("/");
+      }
+    }
+  }, [])
 
   return (
     <Layout
@@ -74,6 +94,14 @@ export default function SaleTemplate(prosp) {
             alignItems: "center",
           }}
         >
+          <button className="btn btn-danger" style={{
+            display: collapsed ? "none" : "block",
+          }} onClick={() => {
+            dispatch(logoutApi())
+            navigate("/")
+          }}>
+            Sign Out
+          </button>
           <button className="btn" style={{ border: "none" }} disabled={true}>
             <i className="fa-solid fa-bars" />
           </button>

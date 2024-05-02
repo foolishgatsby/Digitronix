@@ -16,9 +16,9 @@ export const USER_NAME = "username";
 export const USER_ID = "user_id";
 
 export const ROLE = {
-  ADMIN: {
+  DIRECTOR: {
     id: 1,
-    name: "Admin",
+    name: "Director",
   },
   SALE: {
     id: 4,
