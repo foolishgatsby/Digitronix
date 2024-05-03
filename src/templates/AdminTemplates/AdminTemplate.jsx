@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import style from "./AdminTemplates.module.css";
 
 // antd
 import { Breadcrumb, Flex, Layout, Menu, theme } from "antd";
 import { NotificationFilled, WechatOutlined } from "@ant-design/icons";
-import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import Clock from "../../components/Clock/Clock";
 import { usePathList } from "../../utils/Hooks/usePathList";
 import FunctionPopup from "../../components/FunctionPopup/FunctionPopup";
 import { useDispatch, useSelector } from "react-redux";
-import { setComponent } from "../../redux/reducers/FunctionPopupReducer";
+// import { setComponent } from "../../redux/reducers/FunctionPopupReducer";
 import { ROLE } from "../../utils/constants/settingSystem";
 import { logoutApi } from "../../redux/reducers/LoginReducer";
 const { Header, Content, Footer, Sider } = Layout;
@@ -324,8 +324,8 @@ export default function AdminTemplate(props) {
                   style={{ fontSize: "30px", color: "#000" }}
                 />
               </div>
-              <div className="ml-2 bg-[#f1c40f] text-black text-right">
-                <h5 className="m-0">Le Thanh Phuong</h5>
+              <div className="ml-3 px-5 bg-[#f1c40f] text-black text-right">
+                <h5 className="m-0 uppercase">{userLoginInfo.username}</h5>
                 <h6 className="m-0">Director</h6>
               </div>
             </div>

@@ -47,6 +47,9 @@ export default function Login(props) {
         case ROLE.SALE.id:
           navigate("/sale");
           break;
+        case ROLE.PRODUCTIONMANAGER.id:
+          navigate("/production");
+          break;
         default:
           break;
       }

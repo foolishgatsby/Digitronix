@@ -9,6 +9,7 @@ import Clock from "../../components/Clock/Clock";
 import FunctionPopup from "../../components/FunctionPopup/FunctionPopup";
 import { useDispatch, useSelector } from "react-redux";
 import { ROLE } from "../../utils/constants/settingSystem";
+import { logoutApi } from "../../redux/reducers/LoginReducer";
 
 const activeStyle = (isActive, collapse) => {
   return {
@@ -81,6 +82,14 @@ export default function WarehouseTemplates(props) {
             alignItems: "center",
           }}
         >
+          <button className="btn btn-danger" style={{
+            display: collapsed ? "none" : "block",
+          }} onClick={() => {
+            dispatch(logoutApi())
+            navigate("/")
+          }}>
+            Sign Out
+          </button>
           <button className="btn" style={{ border: "none" }} disabled={true}>
             <i className="fa-solid fa-bars" />
           </button>
@@ -204,8 +213,8 @@ export default function WarehouseTemplates(props) {
             >
               <NotificationFilled style={{ fontSize: "30px", color: "#000" }} />
             </div>
-            <div className="ml-2 bg-[#f1c40f] text-black text-right">
-              <h5 className="m-0">Phan Tan Trung</h5>
+            <div className="ml-3 px-5 bg-[#f1c40f] text-black text-right">
+              <h5 className="m-0 uppercase">{userLoginInfo.username}</h5>
               <h6 className="m-0">Warehouse Manager</h6>
             </div>
           </div>

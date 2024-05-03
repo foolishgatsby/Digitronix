@@ -29,6 +29,9 @@ import OrderDetails from "./pages/Admin/Order/OrderDetails/OrderDetails";
 import MaterialWarehouse from "./pages/Warehouse/Material/MaterialWarehouse";
 import ProductionDetailAdmin from "./pages/Admin/ProductionDetail/ProductionDetailAdmin";
 import SalaryInformation from "./pages/Admin/SalaryInformation/SalaryInformation";
+import ProductionTemplate from "./templates/ProductionTemplates/ProductionTemplate";
+import ProductProduction from "./pages/Production/Product/ProductProduction";
+import MaterialProduction from "./pages/Production/Material/MaterialProduction";
 
 function App() {
   return (
@@ -90,10 +93,18 @@ function App() {
             element={<MaterialCategoryManagement />}
           ></Route>
         </Route>
-        <Route path="production" element={<></>}>
+        <Route path="production" element={<ProductionTemplate />}>
           {/* Product Tab */}
+          <Route
+            path="warehouse"
+            element={<Navigate to={"products"} replace />}
+          />
+          <Route path="warehouse/products" element={<ProductProduction />} />
           {/* Material Tab */}
+          <Route path="warehouse/materials" element={<MaterialProduction />} />
           {/* Production Tab */}
+          <Route path="productionsplan" element={<ProductionAdmin />} />
+          <Route path="" element={<ProductionAdmin />} />
         </Route>
       </Routes>
     </BrowserRouter>

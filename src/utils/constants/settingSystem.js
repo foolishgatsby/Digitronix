@@ -20,6 +20,10 @@ export const ROLE = {
     id: 1,
     name: "Director",
   },
+  PRODUCTIONMANAGER: {
+    id: 2,
+    name: "Production_Manager",
+  },
   SALE: {
     id: 4,
     name: "Sale",
@@ -31,5 +35,9 @@ export const ROLE = {
   WORKER: {
     id: 5,
     name: "Worker",
+  },
+  DRIVER: {
+    id: 6,
+    name: "Driver",
   },
 };

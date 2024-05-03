@@ -221,8 +221,8 @@ export default function SaleTemplate(prosp) {
             >
               <NotificationFilled style={{ fontSize: "30px", color: "#000" }} />
             </div>
-            <div className="ml-2 bg-[#f1c40f] text-black text-right">
-              <h5 className="m-0">Phan Tan Trung</h5>
+            <div className="ml-3 px-5 bg-[#f1c40f] text-black text-right">
+              <h5 className="m-0 uppercase">{userLoginInfo.username}</h5>
               <h6 className="m-0">Sale</h6>
             </div>
           </div>
