@@ -1,4 +1,4 @@
-export const API_DOMAIN = "http://192.168.1.14:1702/api/v1";
+export const API_DOMAIN = "http://192.168.1.3:1702/api/v1";
 
 export const STATUS_CODE = {
   SUCCESS: 200,

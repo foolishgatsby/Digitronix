@@ -196,7 +196,7 @@ export default function MaterialAdmin(props) {
 
   const columns = [
     {
-      title: "Material Name",
+      title: "Material's Name",
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
