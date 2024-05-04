@@ -1,7 +1,7 @@
 import { Space, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllSalaries, timekeepingAPI, updateSalryAPI } from '../../../redux/reducers/SalaryReducer'
+import { getAllSalaries, setSalaryEdit, timekeepingAPI, updateSalaryAPI } from '../../../redux/reducers/SalaryReducer'
 import { setComponentsAction } from '../../../redux/reducers/FunctionPopupReducer'
 import { API_DOMAIN, STATUS_CODE } from '../../../utils/constants/settingSystem'
 
@@ -16,8 +16,8 @@ export default function SalaryInformation(props) {
         },
         {
             title: 'Employee Name',
-            dataIndex: 'employeeName',
-            key: 'employeeName',
+            dataIndex: 'user_name',
+            key: 'user_name',
         },
         {
             title: 'Salary',
@@ -47,6 +47,7 @@ export default function SalaryInformation(props) {
         {
             title: 'Action',
             key: 'action',
+            width: '15%',
             render: (text, record) => (
                 <Space size="middle">
                     <button className='btn btn-warning' onClick={() => {
@@ -54,15 +55,25 @@ export default function SalaryInformation(props) {
                             ...record,
                             working_date: record.working_date + 1
                         }
-                        dispatch(updateSalryAPI(data))
+                        dispatch(updateSalaryAPI(data))
                     }}>Checkin</button>
                     <button className='btn btn-danger' onClick={() => {
                         const data = {
                             ...record,
                             working_date: record.working_date - 1
                         }
-                        dispatch(updateSalryAPI(data))
+                        dispatch(updateSalaryAPI(data))
                     }}>UnCheckin</button>
+                    <button className='btn btn-primary' onClick={() => {
+                        // set edit salary
+                        dispatch(setSalaryEdit(record))
+                        const action = {
+                            type: "ModalReducer/setModalOpen",
+                            title: "Edit Salary",
+                            contentComponentType: "FormEditSalary",
+                        };
+                        dispatch(action);
+                    }}>Edit</button>
                 </Space>
             ),
         }

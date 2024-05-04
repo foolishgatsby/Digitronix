@@ -107,6 +107,34 @@ function FormCreateAccount(props) {
           </Form.Item>
         </Col>
       </Row>
+      <hr className="h-1" />
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item
+            name="salary_per_date"
+            label="Salary per date"
+            rules={[
+              { required: true, message: "Salary per date is required" },
+              { regex: /^[0-9]*$/, message: "Salary per date must be a number" }
+            ]}>
+            <Input placeholder="Salary per date" onChange={handleChange} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item
+            name="min_kpi"
+            label="Min KPI"
+            rules={[
+              { regex: /^[0-9]*$/, message: "Min KPI must be a number" }
+            ]}
+            initialValue={values.min_kpi}
+          >
+            <Input placeholder="Min KPI" onChange={handleChange} />
+          </Form.Item>
+        </Col>
+      </Row>
     </Form>
   );
 }
@@ -119,6 +147,9 @@ const CreateAccountFormik = withFormik({
       password: "",
       retype_password: "",
       role_id: null,
+      salary_per_date: "",
+      min_kpi: 0,
+      working_date: 0,
     };
   },
   handleSubmit: (values, { props, setSubmitting }) => {
@@ -129,6 +160,9 @@ const CreateAccountFormik = withFormik({
       password: values.password,
       retype_password: values.retype_password,
       role_id: values.role_id,
+      salary_per_date: values.salary_per_date,
+      min_kpi: values.min_kpi,
+      working_date: values.working_date,
     };
     props.dispatch(registerApi(newAccount));
     // props.dispatch();

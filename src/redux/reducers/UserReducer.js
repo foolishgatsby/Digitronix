@@ -3,6 +3,7 @@ import { userService } from "../services/UserService";
 import { STATUS_CODE } from "../../utils/constants/settingSystem";
 import { getAllRoleApi, setRoleList } from "./RoleReducer";
 import { setModalCancel } from "./ModalReducer";
+import { salaryService } from "../services/SalaryService";
 
 const initialState = {
   userList: [],
@@ -93,8 +94,20 @@ export const registerApi = (newAccount) => {
       console.log("newAccount", newAccount);
       const result = await userService.register(newAccount);
       if (result.status === STATUS_CODE.SUCCESS) {
-        dispatch(getAllUserApi());
-        dispatch(setModalCancel());
+        // get user id to set salary
+        const user_id = result.data.id;
+        const salary = {
+          user_id,
+          salary_per_date: newAccount.salary_per_date,
+          min_kpi: newAccount.min_kpi,
+          working_date: newAccount.working_date,
+        };
+        const resultSalary = await salaryService.addSalary(salary);
+        if (resultSalary.status === STATUS_CODE.SUCCESS) {
+          alert("Create account successfully");
+          dispatch(getAllUserApi());
+          dispatch(setModalCancel());
+        }
       }
     } catch (error) {
       console.log("error", error.response.data);
