@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { getAllTagsApi, setEditTag } from "../../../redux/reducers/TagsReducer";
+import { deleteTagsApi, getAllTagsApi, setEditTag } from "../../../redux/reducers/TagsReducer";
 import { setComponentsAction } from "../../../redux/reducers/FunctionPopupReducer";
 import { Popconfirm, Table } from "antd";
 import { deleteCategoryApi } from "../../../redux/reducers/CategoryReducer";
@@ -48,9 +48,9 @@ export default function TagManagement(props) {
             <Popconfirm
               onConfirm={() => {
                 // console.log("delete", record);
-                dispatch(deleteCategoryApi(record.id));
+                dispatch(deleteTagsApi(record.id));
               }}
-              title="Are you sure you want to delete this category?"
+              title="Are you sure you want to delete this tag?"
               okButtonProps={{ type: "text" }}
               cancelButtonProps={{ type: "text" }}
             >

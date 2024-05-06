@@ -10,7 +10,7 @@ class TagService extends BaseService {
     return this.post(`products/${product_id}/tags/${tag_id}`);
   }
 
-  delelteTag = (id) => {
+  deleteTag = (id) => {
     return this.delete(`tags/${id}`);
   }
 

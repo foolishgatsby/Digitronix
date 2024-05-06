@@ -21,8 +21,8 @@ const TagsReducer = createSlice({
     },
     setLoadingTags: (state, action) => {
       state.loading = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setTagList, setEditTag, setLoadingTags } = TagsReducer.actions;
@@ -84,11 +84,12 @@ export const deleteTagsApi = (id) => {
     try {
       const result = await tagService.deleteTag(id);
       if (result.status === STATUS_CODE.SUCCESS) {
+        alert("Delete tag success");
         dispatch(getAllTagsApi());
       }
       dispatch(setLoadingTags(false));
     } catch (error) {
-      console.log("error", error.response.data);
+      console.log("error", error);
     }
-  }
+  };
 };
