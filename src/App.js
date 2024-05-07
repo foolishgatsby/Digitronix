@@ -100,6 +100,7 @@ function App() {
             element={<Navigate to={"products"} replace />}
           />
           <Route path="warehouse/products" element={<ProductProduction />} />
+          <Route path="warehouse/products/:id" element={<ProductDetails />} />
           {/* Material Tab */}
           <Route path="warehouse/materials" element={<MaterialProduction />} />
           {/* Production Tab */}

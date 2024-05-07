@@ -57,11 +57,11 @@ function FormCreateMaterial(props) {
               },
               {
                 validator(_, value) {
-                  if (!value || value >= 1) {
+                  if (!value || value >= 0) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("The price must be greater than 0")
+                    new Error("The price must be not less than 0")
                   );
                 },
               },

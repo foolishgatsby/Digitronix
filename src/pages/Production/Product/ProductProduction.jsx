@@ -5,7 +5,7 @@ import { mapTagListToOption } from "../../Admin/Product/ProductAdmin";
 import { getAllProductNoPaging } from "../../../redux/reducers/ProductReducer";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { setComponentsAction } from "../../../redux/reducers/FunctionPopupReducer";
 import { getAllCategoryApi } from "../../../redux/reducers/CategoryReducer";
 import { getAllTagsApi } from "../../../redux/reducers/TagsReducer";
@@ -20,6 +20,8 @@ export default function ProductProduction(props) {
     }, []);
 
     const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const [searchText, setSearchText] = useState("");
     const [searchedColumn, setSearchedColumn] = useState("");
@@ -233,6 +235,16 @@ export default function ProductProduction(props) {
                     columns={columns}
                     dataSource={productList}
                     loading={loading}
+                    rowClassName={(record, index) => {
+                        return "cursor-pointer";
+                    }}
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                navigate(`/production/warehouse/products/${record.id}`)
+                            }
+                        }
+                    }}
                 />
             </div>
         </div>

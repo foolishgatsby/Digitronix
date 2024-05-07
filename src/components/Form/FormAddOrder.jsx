@@ -170,25 +170,7 @@ function FormAddOrder(props) {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Please input total price!",
-              },
-            ]}
-            name="total_price"
-            label="Total Price"
-          >
-            <Input
-              placeholder="Total Price"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
+        <Col span={24}>
           <Form.Item
             rules={[
               {

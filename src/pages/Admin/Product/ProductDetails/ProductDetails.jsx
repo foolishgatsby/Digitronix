@@ -9,6 +9,7 @@ import {
 } from "../../../../redux/reducers/ProductReducer";
 import {
   API_DOMAIN,
+  ROLE,
   STATUS_CODE,
 } from "../../../../utils/constants/settingSystem";
 import { getAllCategoryApi } from "../../../../redux/reducers/CategoryReducer";
@@ -18,7 +19,7 @@ import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
 // css
 import style from "./ProductDetails.module.css";
 import { getAllTagsApi } from "../../../../redux/reducers/TagsReducer";
-import { getProcessByProductId } from "../../../../redux/reducers/ProcessReducer";
+import { getProcessByProductId, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
 import { setComponentsAction } from "../../../../redux/reducers/FunctionPopupReducer";
 import _ from "lodash";
 
@@ -73,6 +74,8 @@ export default function ProductDetails(props) {
 
   const [isEdit, setIsEdit] = useState(false);
 
+  const { userLoginInfo } = useSelector((state) => state.LoginReducer);
+
   const { productEdit } = useSelector((state) => state.ProductReducer);
   const { categoryList } = useSelector((state) => state.CategoryReducer);
   const { tagList } = useSelector((state) => state.TagsReducer);
@@ -83,13 +86,18 @@ export default function ProductDetails(props) {
   const { processByProductId } = useSelector((state) => state.ProcessReducer);
 
   useEffect(() => {
-    let Components = [
-      // {
-      //   tooltip: "Add new process",
-      //   icon: `<i className="fa-solid fa-plus" />`,
-      //   contentComponentType: "FormAddProcess",
-      // },
-    ];
+    let Components = [];
+    if (userLoginInfo?.roleId === ROLE.PRODUCTIONMANAGER.id) {
+      Components = [
+        {
+          tooltip: "Create new process",
+          icon: `<i className="fa-solid fa-plus />`,
+          contentComponentType: "FormAddProcess",
+        }
+      ];
+    } else {
+      Components = [];
+    }
     dispatch(setComponentsAction(Components));
     dispatch(getProductByIdApi(id));
     dispatch(getAllCategoryApi());
@@ -176,7 +184,7 @@ export default function ProductDetails(props) {
                   onSuccess("OK");
                 }
               }}
-              onRemove={(file) => {}}
+              onRemove={(file) => { }}
             >
               {uploadButton}
             </Upload>
@@ -402,7 +410,7 @@ export default function ProductDetails(props) {
           columns={columnsOfProcess}
           dataSource={processByProductId}
           expandable={{
-            rowExpandable: (record) => record.process_details.length > 0,
+            rowExpandable: (record) => true,
             expandedRowRender: (record) => {
               const columns = [
                 {
@@ -445,9 +453,18 @@ export default function ProductDetails(props) {
               const data = _.sortBy(record.process_details, ["intensity"]);
               return (
                 <div>
-                  {/* <button className="btn btn-success">
+                  <button onClick={() => {
+                    dispatch(setProcessEdit(record));
+                    const action = {
+                      type: "ModalReducer/setModalOpen",
+                      title: "Add Process Detail",
+                      contentComponentType: "FormAddProcessDetail",
+                    }
+                    dispatch(action);
+                  }}
+                    className="btn btn-success">
                     Create new process detail
-                  </button> */}
+                  </button>
                   <Table
                     pagination={{
                       hideOnSinglePage: true,
@@ -471,6 +488,6 @@ export default function ProductDetails(props) {
           }}
         />
       </div>
-    </div>
+    </div >
   );
 }

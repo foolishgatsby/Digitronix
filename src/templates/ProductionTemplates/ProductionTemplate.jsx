@@ -233,8 +233,8 @@ export default function ProductionTemplate(props) {
                                 />
                             </div>
                             <div className="ml-2 bg-[#f1c40f] text-black text-right">
-                                <h5 className="m-0">Le Thanh Phuong</h5>
-                                <h6 className="m-0">Director</h6>
+                                <h5 className="m-0">{userLoginInfo.username}</h5>
+                                <h6 className="m-0">Production Manager</h6>
                             </div>
                         </div>
                     </div>
