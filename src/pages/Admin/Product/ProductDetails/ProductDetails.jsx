@@ -18,7 +18,7 @@ import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 // css
 import style from "./ProductDetails.module.css";
-import { getAllTagsApi } from "../../../../redux/reducers/TagsReducer";
+import { getAllTagsApi, removeTagFromProductApi } from "../../../../redux/reducers/TagsReducer";
 import { getProcessByProductId, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
 import { setComponentsAction } from "../../../../redux/reducers/FunctionPopupReducer";
 import _ from "lodash";
@@ -331,7 +331,9 @@ export default function ProductDetails(props) {
                     <Tag
                       closeIcon
                       onClose={(e) => {
-                        console.log(e);
+                        e.preventDefault();
+                        // call api to remove tag from product
+                        dispatch(removeTagFromProductApi(tag.id, productEdit.id));
                       }}
                       key={index}
                     >

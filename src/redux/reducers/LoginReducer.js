@@ -45,6 +45,7 @@ export const loginApi = (userLogin) => {
     try {
       const result = await userService.login(userLogin);
       if (result.status === STATUS_CODE.SUCCESS) {
+        localStorage.setItem(TOKEN, result.data.token);
         dispatch(setUserInfoAction(result.data));
       }
       // console.log(result);

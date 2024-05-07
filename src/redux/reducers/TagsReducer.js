@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { tagService } from "../services/TagService";
 import { STATUS_CODE } from "../../utils/constants/settingSystem";
 import { setModalCancel } from "./ModalReducer";
+import { getProductByIdApi } from "./ProductReducer";
+import { getMaterialByIdApi } from "./MaterialReducer";
 
 const initialState = {
   tagList: [],
@@ -86,6 +88,41 @@ export const deleteTagsApi = (id) => {
       if (result.status === STATUS_CODE.SUCCESS) {
         alert("Delete tag success");
         dispatch(getAllTagsApi());
+      }
+      dispatch(setLoadingTags(false));
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+};
+
+export const removeTagFromProductApi = (tag_id, product_id) => {
+  return async (dispatch) => {
+    dispatch(setLoadingTags(true));
+    try {
+      const result = await tagService.removeTagFromProduct(tag_id, product_id);
+      if (result.status === STATUS_CODE.SUCCESS) {
+        dispatch(getAllTagsApi());
+        dispatch(getProductByIdApi(product_id));
+      }
+      dispatch(setLoadingTags(false));
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+};
+
+export const removeTagFromMaterialApi = (tag_id, material_id) => {
+  return async (dispatch) => {
+    dispatch(setLoadingTags(true));
+    try {
+      const result = await tagService.removeTagFromMaterial(
+        tag_id,
+        material_id
+      );
+      if (result.status === STATUS_CODE.SUCCESS) {
+        dispatch(getAllTagsApi());
+        dispatch(getMaterialByIdApi(material_id));
       }
       dispatch(setLoadingTags(false));
     } catch (error) {

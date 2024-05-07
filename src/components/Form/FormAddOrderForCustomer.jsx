@@ -15,6 +15,8 @@ export const mapProductListToOptions = (productList) => {
     return {
       label: product.name,
       value: product.id,
+      category: product.category_name,
+      tags: product.tags,
     };
   });
 };
@@ -39,6 +41,8 @@ function FormAddOrderForCustomer(props) {
   useImperativeHandle(props.formRef, () => ({
     submitForm: handleSubmit,
   }));
+
+  const [choosenProducts, setChoosenProducts] = React.useState([]);
 
   return (
     <Form layout="vertical" onFinish={handleSubmit}>
@@ -171,25 +175,7 @@ function FormAddOrderForCustomer(props) {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Please input total price!",
-              },
-            ]}
-            name="total_price"
-            label="Total Price"
-          >
-            <Input
-              placeholder="Total Price"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
+        <Col span={24}>
           <Form.Item
             rules={[
               {
@@ -242,13 +228,18 @@ function FormAddOrderForCustomer(props) {
                             placeholder="Product ID"
                             {...restField}
                             options={mapProductListToOptions(
-                              values.productList
+                              // filter out choosen products
+                              values.productList.filter(
+                                (product) =>
+                                  !choosenProducts.includes(product.id)
+                              )
                             )}
                             onSelect={(value, option) => {
                               setFieldValue(
                                 `order_detail_list[${key}].product_id`,
                                 value
                               );
+                              setChoosenProducts([...choosenProducts, value]);
                             }}
                           />
                         </Form.Item>
@@ -303,7 +294,6 @@ const AddOrderForCustomerFormik = withFormik({
       deadline: "",
       delivery_method: "",
       payment_method: "",
-      total_price: "",
       status: "",
       user_id: localStorage.getItem(USER_ID),
       user_name: localStorage.getItem(USER_NAME),
@@ -320,7 +310,6 @@ const AddOrderForCustomerFormik = withFormik({
       deadline: values.deadline,
       delivery_method: values.delivery_method,
       payment_method: values.payment_method,
-      total_price: values.total_price,
       status: values.status,
       user_id: values.user_id,
       customer_id: values.customer_id,

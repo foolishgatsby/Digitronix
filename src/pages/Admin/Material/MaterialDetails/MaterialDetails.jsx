@@ -17,7 +17,7 @@ import {
   getMaterialByIdApi,
 } from "../../../../redux/reducers/MaterialReducer";
 import { uploadImageApi } from "../../../../redux/reducers/ProductReducer";
-import { getAllTagsApi } from "../../../../redux/reducers/TagsReducer";
+import { getAllTagsApi, removeTagFromMaterialApi } from "../../../../redux/reducers/TagsReducer";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -127,7 +127,7 @@ export default function MaterialDetails(props) {
                 onSuccess("OK");
               }
             }}
-            onRemove={(file) => {}}
+            onRemove={(file) => { }}
           >
             {uploadButton}
           </Upload>
@@ -251,7 +251,9 @@ export default function MaterialDetails(props) {
                   <Tag
                     closeIcon
                     onClose={(e) => {
-                      console.log(e);
+                      // console.log(e);
+                      // call api to remove tag from product
+                      dispatch(removeTagFromMaterialApi(tag.id, materialEdit.id));
                     }}
                     key={index}
                   >

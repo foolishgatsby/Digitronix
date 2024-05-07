@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select, Tag } from "antd";
 import { withFormik } from "formik";
 import React, { useEffect, useImperativeHandle } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -217,24 +217,38 @@ function FormAddOrder(props) {
                       gutter={16}
                       style={{ marginBottom: "8px", alignItems: "baseline" }}
                     >
-                      <Col span={12}>
+                      <Col span={18}>
                         <Form.Item {...restField} name={[name, "product_id"]}>
                           <Select
-                            placeholder="Product ID"
+                            placeholder="Product Name"
                             {...restField}
-                            options={mapProductListToOptions(
-                              values.productList
-                            )}
                             onSelect={(value, option) => {
                               setFieldValue(
                                 `order_detail_list[${key}].product_id`,
                                 value
                               );
                             }}
+                            options={mapProductListToOptions(values.productList)}
+                            optionRender={(option) => {
+                              return (
+                                <div>
+                                  <span>{option.data.label}</span>
+                                  <span> - </span>
+                                  <span>{option.data.category_name}</span>
+                                  <div>
+                                    {option.data.tags.map((tag, index) => {
+                                      return (
+                                        <Tag key={index}>{tag.name}</Tag>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
+                            }}
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={10}>
+                      <Col span={4}>
                         <Form.Item {...restField} name={[name, "quantity"]}>
                           <Input
                             placeholder="Quantity"
