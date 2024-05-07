@@ -19,43 +19,9 @@ import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
 // css
 import style from "./ProductDetails.module.css";
 import { getAllTagsApi, removeTagFromProductApi } from "../../../../redux/reducers/TagsReducer";
-import { getProcessByProductId, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
+import { deleteProcessApi, deleteProcessDetailApi, getProcessByProductId, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
 import { setComponentsAction } from "../../../../redux/reducers/FunctionPopupReducer";
 import _ from "lodash";
-
-const columnsOfProcess = [
-  {
-    title: "Process Id",
-    dataIndex: "id",
-    key: "id",
-    width: "25%",
-  },
-  {
-    title: "Process Name",
-    dataIndex: "process_name",
-    key: "process_name",
-    width: "25%",
-  },
-  {
-    title: "Created At",
-    dataIndex: "created_at",
-    key: "created_at",
-    record: (text, record) => {
-      console.log(record.created_at);
-      return new Date(record.created_at).toLocaleString();
-    },
-    width: "25%",
-  },
-  {
-    title: "Last Update",
-    dataIndex: "updated_at",
-    key: "updated_at",
-    record: (text, record) => {
-      return new Date(record.updated_at).toLocaleString();
-    },
-    width: "25%",
-  },
-];
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -66,6 +32,76 @@ const getBase64 = (file) =>
   });
 
 export default function ProductDetails(props) {
+
+  const columnsOfProcess = [
+    {
+      title: "Process Id",
+      dataIndex: "id",
+      key: "id",
+      width: "5%",
+    },
+    {
+      title: "Process Name",
+      dataIndex: "process_name",
+      key: "process_name",
+      width: "25%",
+    },
+    {
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
+      record: (text, record) => {
+        console.log(record.created_at);
+        return new Date(record.created_at).toLocaleString();
+      },
+      width: "25%",
+    },
+    {
+      title: "Last Update",
+      dataIndex: "updated_at",
+      key: "updated_at",
+      record: (text, record) => {
+        return new Date(record.updated_at).toLocaleString();
+      },
+      width: "25%",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      width: "20%",
+      render: (text, record) => {
+        return (
+          <div>
+            <button
+              onClick={() => {
+                // dispatch(setProcessEdit(record));
+                // const action = {
+                //   type: "ModalReducer/setModalOpen",
+                //   title: "Edit Process",
+                //   contentComponentType: "FormEditProcess",
+                // }
+                // dispatch(action);
+              }}
+              className="btn btn-warning"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                // call api to delete process
+                dispatch(deleteProcessApi(record.id, record.product_id));
+              }}
+              className="btn btn-danger ms-3"
+            >
+              Delete
+            </button>
+          </div>
+        );
+      }
+    }
+  ];
+
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -451,6 +487,41 @@ export default function ProductDetails(props) {
                     return new Date(record.created_at).toLocaleString();
                   },
                 },
+                {
+                  title: "Action",
+                  dataIndex: "action",
+                  key: "action",
+                  render: (text, record) => {
+                    return (
+                      <div>
+                        <button
+                          onClick={() => {
+                            // dispatch(setProcessEdit(record));
+                            // const action = {
+                            //   type: "ModalReducer/setModalOpen",
+                            //   title: "Edit Process Detail",
+                            //   contentComponentType: "FormEditProcessDetail",
+                            // }
+                            // dispatch(action);
+                          }}
+                          className="btn btn-warning"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            console.log(record);
+                            // call api to delete process detail
+                            dispatch(deleteProcessDetailApi(record.id, productEdit.id, record.process_id));
+                          }}
+                          className="btn btn-danger ms-3"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    );
+                  }
+                }
               ];
               const data = _.sortBy(record.process_details, ["intensity"]);
               return (
@@ -471,14 +542,14 @@ export default function ProductDetails(props) {
                     pagination={{
                       hideOnSinglePage: true,
                     }}
-                    onRow={(record, index) => {
-                      return {
-                        onClick: () => {
-                          console.log(record);
-                          navigate(`process-detail/${record.id}`);
-                        },
-                      };
-                    }}
+                    // onRow={(record, index) => {
+                    //   return {
+                    //     onClick: () => {
+                    //       console.log(record);
+                    //       navigate(`process-detail/${record.id}`);
+                    //     },
+                    //   };
+                    // }}
                     rowKey={(record) => record.id}
                     columns={columns}
                     dataSource={data}

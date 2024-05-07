@@ -3,7 +3,7 @@ import React, { useEffect, useImperativeHandle } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { getAllMaterialNoPaging } from '../../redux/reducers/MaterialReducer';
 import { getAllProductNoPaging } from '../../redux/reducers/ProductReducer';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Input, Row, Select, Tag } from 'antd';
 import { addProcessDetailApi } from '../../redux/reducers/ProcessReducer';
 
 function FormAddProcessDetail(props) {
@@ -85,18 +85,38 @@ function FormAddProcessDetail(props) {
                 <Col span={24}>
                     <Form.Item
                         rules={
-                            [{ required: true, message: "Input material quantity is required" }]
+                            [{ required: true, message: "Input material is required" }]
                         }
-                        name='in_material_quantity'
-                        label='Input material quantity'
+                        name='in_material_id'
+                        label='Input material'
                     >
-                        <Select placeholder="Choose material" onChange={(value) => {
-                            setFieldValue('in_material_id', value);
-                        }}>
-                            {materialList.map((material, index) => {
-                                return <Select.Option key={index} value={material.id}>{material.name}</Select.Option>
+                        <Select
+                            placeholder="Choose material"
+                            onChange={(value) => {
+                                setFieldValue('in_material_id', value);
+                            }}
+                            options={materialList.map((material, index) => {
+                                return {
+                                    value: material.id,
+                                    label: material.name,
+                                    tags: material.tags
+                                }
                             })}
-                        </Select>
+                            optionRender={(option) => {
+                                return (
+                                    <div>
+                                        <span>{option.data.label}</span>
+                                        <div>
+                                            {option.data.tags.map((tag, index) => {
+                                                return (
+                                                    <Tag key={index}>{tag.name}</Tag>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -128,52 +148,72 @@ function FormAddProcessDetail(props) {
                     setDisplayOutput(false);
                 }}>Back</button>
             </div>
-            {displayOutput ? (
-                <Row gutter={16}>
-                    <Col span={24}>
-                        <Form.Item
-                            rules={[{ required: true, message: 'Output type is required' }]}
-                            name='out_type'
-                            label='Output type'
-                            initialValue={type[0]}
-                        >
-                            <Select placeholder='Choose type' onChange={(value) => {
-                                handleTypeChange(value);
-                            }}>
-                                {type.map((item, index) => {
-                                    return (
-                                        <Select.Option key={index} value={item}>
-                                            {item}
-                                        </Select.Option>
-                                    );
-                                }
-                                )}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <Form.Item
-                            rules={[{ required: true, message: 'Output is required' }]}
-                            name='out_id'
-                            label='Output'
-                        >
-                            <Select placeholder='Choose output' onChange={(value) => {
-                                handleOutputChange(value);
-                            }}>
-                                {outputType?.map((output, index) => {
-                                    return (
-                                        <Select.Option key={index} value={output.id}>
-                                            {output.name}
-                                        </Select.Option>
-                                    );
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            ) : null
+            {
+                displayOutput ? (
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                rules={[{ required: true, message: 'Output type is required' }]}
+                                name='out_type'
+                                label='Output type'
+                                initialValue={type[0]}
+                            >
+                                <Select placeholder='Choose type' onChange={(value) => {
+                                    handleTypeChange(value);
+                                }}>
+                                    {type.map((item, index) => {
+                                        return (
+                                            <Select.Option key={index} value={item}>
+                                                {item}
+                                            </Select.Option>
+                                        );
+                                    }
+                                    )}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={24}>
+                            <Form.Item
+                                rules={[{ required: true, message: 'Output is required' }]}
+                                name='out_id'
+                                label='Output'
+                            >
+                                <Select
+                                    placeholder='Choose output'
+                                    onChange={(value) => {
+                                        handleOutputChange(value);
+                                    }}
+                                    options={outputType?.map((output, index) => {
+                                        return {
+                                            value: output.id,
+                                            label: output.name,
+                                            tags: output.tags,
+                                            category_name: output.category_name
+                                        }
+                                    })}
+                                    optionRender={(option) => {
+                                        return (
+                                            <div>
+                                                <span>{option.data.label}</span>
+                                                <span> - </span>
+                                                <span>{option.data.category_name}</span>
+                                                <div>
+                                                    {option.data.tags.map((tag, index) => {
+                                                        return (
+                                                            <Tag key={index}>{tag.name}</Tag>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                ) : null
             }
-        </Form>
+        </Form >
     )
 }
 

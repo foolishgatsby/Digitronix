@@ -20,6 +20,14 @@ class ProcessService extends BaseService {
   addProcessDetail = (data) => {
     return this.post("process_details", data);
   };
+
+  deleteProcess = (processId) => {
+    return this.delete(`processes/${processId}`);
+  };
+
+  deleteProcessDetail = (processDetailId) => {
+    return this.delete(`process_details/${processDetailId}`);
+  };
 }
 
 export const processService = new ProcessService();

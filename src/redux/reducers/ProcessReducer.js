@@ -121,3 +121,43 @@ export const addProcessDetailApi = (data) => {
     }
   };
 };
+
+export const deleteProcessApi = (processId, productId) => {
+  return async (dispatch) => {
+    dispatch(setProcessListLoading(true));
+    try {
+      const result = await processService.deleteProcess(processId);
+      if (result.status === STATUS_CODE.SUCCESS) {
+        alert("Delete process successfully");
+        dispatch(getProcessByProductId(productId));
+      }
+      dispatch(setProcessListLoading(false));
+    } catch (error) {
+      console.log("error", error);
+      dispatch(setProcessListLoading(false));
+    }
+  };
+};
+
+export const deleteProcessDetailApi = (
+  processDetailId,
+  productId,
+  processId
+) => {
+  return async (dispatch) => {
+    dispatch(setProcessListLoading(true));
+    try {
+      const result = await processService.deleteProcessDetail(processDetailId);
+      if (result.status === STATUS_CODE.SUCCESS) {
+        alert("Delete process detail successfully");
+        dispatch(getProcessByProductId(productId));
+        dispatch(getProcessById(processId));
+        dispatch(getAllProcessApi());
+      }
+      dispatch(setProcessListLoading(false));
+    } catch (error) {
+      console.log("error", error);
+      dispatch(setProcessListLoading(false));
+    }
+  };
+};

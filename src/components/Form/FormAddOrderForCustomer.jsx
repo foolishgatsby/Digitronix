@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, Row, Select, Space } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select, Space, Tag } from "antd";
 import { withFormik } from "formik";
 import React, { useEffect, useImperativeHandle } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -222,29 +222,38 @@ function FormAddOrderForCustomer(props) {
                       gutter={16}
                       style={{ marginBottom: "8px", alignItems: "baseline" }}
                     >
-                      <Col span={12}>
+                      <Col span={18}>
                         <Form.Item {...restField} name={[name, "product_id"]}>
                           <Select
-                            placeholder="Product ID"
+                            placeholder="Product Name"
                             {...restField}
-                            options={mapProductListToOptions(
-                              // filter out choosen products
-                              values.productList.filter(
-                                (product) =>
-                                  !choosenProducts.includes(product.id)
-                              )
-                            )}
                             onSelect={(value, option) => {
                               setFieldValue(
                                 `order_detail_list[${key}].product_id`,
                                 value
                               );
-                              setChoosenProducts([...choosenProducts, value]);
+                            }}
+                            options={mapProductListToOptions(values.productList)}
+                            optionRender={(option) => {
+                              return (
+                                <div>
+                                  <span>{option.data.label}</span>
+                                  <span> - </span>
+                                  <span>{option.data.category_name}</span>
+                                  <div>
+                                    {option.data.tags.map((tag, index) => {
+                                      return (
+                                        <Tag key={index}>{tag.name}</Tag>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
                             }}
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={10}>
+                      <Col span={4}>
                         <Form.Item {...restField} name={[name, "quantity"]}>
                           <Input
                             placeholder="Quantity"
