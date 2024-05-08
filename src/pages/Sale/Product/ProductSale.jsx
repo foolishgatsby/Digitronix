@@ -212,6 +212,20 @@ export default function ProductSale(props) {
       sortDirections: ["descend", "ascend"],
     },
     {
+      title: "Missing Quantity",
+      dataIndex: "missing",
+      key: "missing",
+      render: (text) => (
+        <p style={{ margin: 0 }}>
+          {text === 0 ? (
+            <Tag color="green">No missing quantity</Tag>
+          ) : (
+            <Tag color="red">{Number(text * (-1))} missing quantity</Tag>
+          )}
+        </p>
+      ),
+    },
+    {
       title: "Price",
       dataIndex: "price",
       key: "price",

@@ -214,14 +214,19 @@ export default function ProductProduction(props) {
             sortDirections: ["descend", "ascend"],
         },
         {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
-            sorter: (a, b) => a.price - b.price,
+            title: "Missing Quantity",
+            dataIndex: "missing",
+            key: "missing",
             render: (text) => (
-                <p style={{ margin: 0 }}>{text.toLocaleString()} VND</p>
+                <p style={{ margin: 0 }}>
+                    {text === 0 ? (
+                        <Tag color="green">No missing quantity</Tag>
+                    ) : (
+                        <Tag color="red">{Number(text * (-1))} missing quantity</Tag>
+                    )}
+                </p>
             ),
-        },
+        }
     ];
 
     return (

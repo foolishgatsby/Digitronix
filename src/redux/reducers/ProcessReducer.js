@@ -9,6 +9,7 @@ const initialState = {
   processByProductId: [],
   processEdit: {},
   processDetailListOfProcessEdit: [],
+  processDetailEdit: {},
 };
 
 const ProcessReducer = createSlice({
@@ -27,6 +28,9 @@ const ProcessReducer = createSlice({
     setProcessEdit: (state, action) => {
       state.processEdit = action.payload;
     },
+    setProcessDetailEdit: (state, action) => {
+      state.processDetailEdit = action.payload;
+    },
   },
 });
 
@@ -35,6 +39,7 @@ export const {
   setProcessList,
   setProcessListLoading,
   setProcessByProductId,
+  setProcessDetailEdit,
 } = ProcessReducer.actions;
 
 export default ProcessReducer.reducer;
@@ -155,6 +160,44 @@ export const deleteProcessDetailApi = (
         dispatch(getAllProcessApi());
       }
       dispatch(setProcessListLoading(false));
+    } catch (error) {
+      console.log("error", error);
+      dispatch(setProcessListLoading(false));
+    }
+  };
+};
+
+export const updateProcessApi = (data) => {
+  return async (dispatch) => {
+    dispatch(setProcessListLoading(true));
+    try {
+      const result = await processService.updateProcess(data);
+      if (result.status === STATUS_CODE.SUCCESS) {
+        dispatch(getProcessByProductId(data.product_id));
+        dispatch(getProcessById(data.id));
+        dispatch(getAllProcessApi());
+      }
+      dispatch(setProcessListLoading(false));
+      dispatch(setModalCancel());
+    } catch (error) {
+      console.log("error", error);
+      dispatch(setProcessListLoading(false));
+    }
+  };
+};
+
+export const updateProcessDetailApi = (data) => {
+  return async (dispatch) => {
+    dispatch(setProcessListLoading(true));
+    try {
+      const result = await processService.updateProcessDetail(data);
+      if (result.status === STATUS_CODE.SUCCESS) {
+        dispatch(getProcessByProductId(data.product_id));
+        dispatch(getProcessById(data.process_id));
+        dispatch(getAllProcessApi());
+      }
+      dispatch(setProcessListLoading(false));
+      dispatch(setModalCancel());
     } catch (error) {
       console.log("error", error);
       dispatch(setProcessListLoading(false));

@@ -2,7 +2,7 @@ import React, { useEffect, useImperativeHandle } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { editMaterialApi, getAllMaterialNoPaging } from '../../redux/reducers/MaterialReducer';
 import { withFormik } from 'formik';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Input, Row, Select, Tag } from 'antd';
 import { importExportMaterialAPI } from '../../redux/reducers/DataAccess';
 
 export const mapMaterialListToOption = (materialList) => {
@@ -51,14 +51,37 @@ function FormImportMaterial(props) {
                         <Select
                             showSearch
                             placeholder='Select material ID'
-                            optionFilterProp='children'
+                            optionFilterProp='label'
                             filterOption={filterOption}
                             onChange={(value, option) => {
                                 setFieldValue('material_id', value);
                                 setFieldValue('material_name', option.label);
                                 setFieldValue('material_quantity_before', option.quantity);
                             }}
-                            options={mapMaterialListToOption(values.materialList)}
+                            options={values.materialList?.map((material, index) => {
+                                return {
+                                    value: material.id,
+                                    label: material.name,
+                                    tags: material.tags,
+                                    category_name: material.category_name,
+                                    quantity: material.quantity,
+                                }
+                            }
+                            )}
+                            optionRender={(option) => {
+                                return (
+                                    <div>
+                                        <span>{option.data.label}</span>
+                                        <span> - </span>
+                                        <span>{option.data.category_name}</span>
+                                        <div>
+                                            {option.data.tags?.map((tag, index) => (
+                                                <Tag key={index} className='tag'>{tag.name}</Tag>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )
+                            }}
                         />
                     </Form.Item>
                 </Col>
@@ -110,6 +133,7 @@ const ImportMaterialFormik = withFormik({
                 Number(values.material_quantity_before) +
                 Number(values.material_quantity),
         }
+        console.log(editMaterial);
         props.dispatch(editMaterialApi(editMaterial));
     },
     displayName: "ImportMaterialForm",

@@ -19,7 +19,7 @@ import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
 // css
 import style from "./ProductDetails.module.css";
 import { getAllTagsApi, removeTagFromProductApi } from "../../../../redux/reducers/TagsReducer";
-import { deleteProcessApi, deleteProcessDetailApi, getProcessByProductId, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
+import { deleteProcessApi, deleteProcessDetailApi, getProcessByProductId, setProcessDetailEdit, setProcessEdit } from "../../../../redux/reducers/ProcessReducer";
 import { setComponentsAction } from "../../../../redux/reducers/FunctionPopupReducer";
 import _ from "lodash";
 
@@ -33,18 +33,38 @@ const getBase64 = (file) =>
 
 export default function ProductDetails(props) {
 
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  //   console.log("id", id);
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const { userLoginInfo } = useSelector((state) => state.LoginReducer);
+
+  const { productList } = useSelector((state) => state.ProductReducer);
+  const { materialList } = useSelector((state) => state.MaterialReducer);
+  const { productEdit } = useSelector((state) => state.ProductReducer);
+  const { categoryList } = useSelector((state) => state.CategoryReducer);
+  const { tagList } = useSelector((state) => state.TagsReducer);
+  // get Product Details from api by calling get product by ID and render the details page
+
+  const [afterEdit, setAfterEdit] = useState({});
+
+  const { processByProductId } = useSelector((state) => state.ProcessReducer);
+
   const columnsOfProcess = [
     {
       title: "Process Id",
       dataIndex: "id",
       key: "id",
-      width: "5%",
+      width: "10%",
     },
     {
       title: "Process Name",
       dataIndex: "process_name",
       key: "process_name",
-      width: "25%",
     },
     {
       title: "Created At",
@@ -54,7 +74,6 @@ export default function ProductDetails(props) {
         console.log(record.created_at);
         return new Date(record.created_at).toLocaleString();
       },
-      width: "25%",
     },
     {
       title: "Last Update",
@@ -63,9 +82,8 @@ export default function ProductDetails(props) {
       record: (text, record) => {
         return new Date(record.updated_at).toLocaleString();
       },
-      width: "25%",
     },
-    {
+    userLoginInfo?.roleId === ROLE.PRODUCTIONMANAGER.id ? {
       title: "Action",
       dataIndex: "action",
       key: "action",
@@ -75,13 +93,13 @@ export default function ProductDetails(props) {
           <div>
             <button
               onClick={() => {
-                // dispatch(setProcessEdit(record));
-                // const action = {
-                //   type: "ModalReducer/setModalOpen",
-                //   title: "Edit Process",
-                //   contentComponentType: "FormEditProcess",
-                // }
-                // dispatch(action);
+                dispatch(setProcessEdit(record));
+                const action = {
+                  type: "ModalReducer/setModalOpen",
+                  title: "Edit Process",
+                  contentComponentType: "FormEditProcess",
+                }
+                dispatch(action);
               }}
               className="btn btn-warning"
             >
@@ -99,27 +117,8 @@ export default function ProductDetails(props) {
           </div>
         );
       }
-    }
+    } : {}
   ];
-
-  const navigate = useNavigate();
-
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  //   console.log("id", id);
-
-  const [isEdit, setIsEdit] = useState(false);
-
-  const { userLoginInfo } = useSelector((state) => state.LoginReducer);
-
-  const { productEdit } = useSelector((state) => state.ProductReducer);
-  const { categoryList } = useSelector((state) => state.CategoryReducer);
-  const { tagList } = useSelector((state) => state.TagsReducer);
-  // get Product Details from api by calling get product by ID and render the details page
-
-  const [afterEdit, setAfterEdit] = useState({});
-
-  const { processByProductId } = useSelector((state) => state.ProcessReducer);
 
   useEffect(() => {
     let Components = [];
@@ -465,11 +464,19 @@ export default function ProductDetails(props) {
                   title: "Input Material",
                   dataIndex: "in_material_id",
                   key: "in_material_id",
+                  render: (text, record) => {
+                    return record.material_name;
+                  }
                 },
                 {
                   title: "Output",
                   dataIndex: "out_id",
                   key: "out_id",
+                  render: (text, record) => {
+                    console.log(record.is_final);
+                    return record.is_final ? `Final Product: ${productList.find((product) => product.id === record.out_id)?.name}`
+                      : `Material: ${materialList.find((material) => material.id === record.out_id)?.name}`;
+                  }
                 },
                 {
                   title: "Last Update",
@@ -487,7 +494,7 @@ export default function ProductDetails(props) {
                     return new Date(record.created_at).toLocaleString();
                   },
                 },
-                {
+                userLoginInfo?.roleId === ROLE.PRODUCTIONMANAGER.id ? {
                   title: "Action",
                   dataIndex: "action",
                   key: "action",
@@ -496,13 +503,13 @@ export default function ProductDetails(props) {
                       <div>
                         <button
                           onClick={() => {
-                            // dispatch(setProcessEdit(record));
-                            // const action = {
-                            //   type: "ModalReducer/setModalOpen",
-                            //   title: "Edit Process Detail",
-                            //   contentComponentType: "FormEditProcessDetail",
-                            // }
-                            // dispatch(action);
+                            dispatch(setProcessDetailEdit(record));
+                            const action = {
+                              type: "ModalReducer/setModalOpen",
+                              title: "Edit Process Detail",
+                              contentComponentType: "FormEditProcessDetail",
+                            }
+                            dispatch(action);
                           }}
                           className="btn btn-warning"
                         >
@@ -521,7 +528,7 @@ export default function ProductDetails(props) {
                       </div>
                     );
                   }
-                }
+                } : {}
               ];
               const data = _.sortBy(record.process_details, ["intensity"]);
               return (
@@ -542,14 +549,6 @@ export default function ProductDetails(props) {
                     pagination={{
                       hideOnSinglePage: true,
                     }}
-                    // onRow={(record, index) => {
-                    //   return {
-                    //     onClick: () => {
-                    //       console.log(record);
-                    //       navigate(`process-detail/${record.id}`);
-                    //     },
-                    //   };
-                    // }}
                     rowKey={(record) => record.id}
                     columns={columns}
                     dataSource={data}

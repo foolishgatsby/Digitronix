@@ -17,7 +17,13 @@ function FormEditOrder(props) {
     }));
 
     return (
-        <Form layout="vertical" onFinish={handleSubmit}>
+        <Form layout="vertical" onFinish={() => {
+            if (values.status === "confirmed") {
+                alert("Cannot edit confirmed order!");
+                return;
+            }
+            handleSubmit();
+        }}>
             <Row gutter={16}>
                 <Col span={24}>
                     <Form.Item
@@ -37,6 +43,7 @@ function FormEditOrder(props) {
                 <Col span={24}>
                     <Form.Item name="customer_id" label="Customer's Name" initialValue={values.customer_id}>
                         <Select
+                            disabled={values.status === "confirmed" ? true : false}
                             placeholder="Choose customer"
                             options={mapCustomerListToOption(values.customerList)}
                             onChange={(value) => setFieldValue("customer_id", value)}
@@ -58,6 +65,7 @@ function FormEditOrder(props) {
                         initialValue={dayjs(values.created_date)}
                     >
                         <DatePicker
+                            disabled={values.status === "confirmed" ? true : false}
                             className="w-full"
                             showTime
                             onChange={(date, dateString) =>
@@ -88,6 +96,7 @@ function FormEditOrder(props) {
                         initialValue={dayjs(values.deadline)}
                     >
                         <DatePicker
+                            disabled={values.status === "confirmed" ? true : false}
                             className="w-full"
                             showTime
                             onChange={(date, dateString) =>
@@ -111,6 +120,7 @@ function FormEditOrder(props) {
                         initialValue={values.delivery_method}
                     >
                         <Select
+                            disabled={values.status === "confirmed" ? true : false}
                             placeholder="Delivery Method"
                             onChange={(value) => setFieldValue("delivery_method", value)}
                             options={[
@@ -134,6 +144,7 @@ function FormEditOrder(props) {
                         initialValue={values.payment_method}
                     >
                         <Select
+                            disabled={values.status === "confirmed" ? true : false}
                             placeholder="Payment Method"
                             onChange={(value) => setFieldValue("payment_method", value)}
                             options={[
@@ -159,6 +170,7 @@ function FormEditOrder(props) {
                         initialValue={values.total_price}
                     >
                         <Input
+                            disabled={values.status === "confirmed" ? true : false}
                             placeholder="Total Price"
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -178,6 +190,7 @@ function FormEditOrder(props) {
                         initialValue={values.status}
                     >
                         <Select
+                            disabled={values.status === "confirmed" ? true : false}
                             placeholder="Status"
                             onChange={(value) => setFieldValue("status", value)}
                             options={[
@@ -217,6 +230,10 @@ const EditOrderFormik = withFormik({
     },
     handleSubmit: (values, { props, setSubmitting }) => {
         // handle submit form
+        if (values.status === "confirmed") {
+            alert("Cannot edit confirmed order!");
+            return;
+        }
         props.dispatch(updateOrderAPI(values));
     },
     displayName: "EditOrderFormik",

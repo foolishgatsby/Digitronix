@@ -1,4 +1,4 @@
-import { Col, Form, Input, Row, Select } from "antd";
+import { Col, Form, Input, Row, Select, Tag } from "antd";
 import { withFormik } from "formik";
 import React, { useEffect, useImperativeHandle } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -53,14 +53,38 @@ function FormImportProduct(props) {
             <Select
               showSearch
               placeholder="Select product ID"
-              optionFilterProp="children"
+              optionFilterProp="label"
               filterOption={filterOption}
               onChange={(value, option) => {
                 setFieldValue("product_id", value);
                 setFieldValue("product_name", option.label);
                 setFieldValue("product_quantity_before", option.quantity);
               }}
-              options={mapProductListToOption(values.productList)}
+              options={values.productList?.map((product, index) => {
+                return {
+                  value: product.id,
+                  label: product.name,
+                  tags: product.tags,
+                  category_name: product.category_name,
+                  quantity: product.quantity,
+                }
+              })}
+              optionRender={(option) => {
+                return (
+                  <div>
+                    <span>{option.data.label}</span>
+                    <span> - </span>
+                    <span>{option.data.category_name}</span>
+                    <div>
+                      {option.data.tags.map((tag, index) => {
+                        return (
+                          <Tag key={index}>{tag.name}</Tag>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }}
             />
           </Form.Item>
         </Col>
@@ -103,7 +127,7 @@ const ImportProductFormik = withFormik({
     };
   },
   handleSubmit: (values, { props }) => {
-    console.log(values);
+    // console.log(values);
     // call API for import product
     props.dispatch(importExportProductAPI(values));
     const editProduct = {
@@ -113,6 +137,7 @@ const ImportProductFormik = withFormik({
         Number(values.product_quantity) +
         Number(values.product_quantity_before),
     };
+    // console.log(editProduct);
     props.dispatch(editProductApi(editProduct));
   },
 })(FormImportProduct);

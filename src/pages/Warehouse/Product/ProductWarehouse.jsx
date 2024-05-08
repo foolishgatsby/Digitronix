@@ -13,6 +13,7 @@ import { getAllCategoryApi } from "../../../redux/reducers/CategoryReducer";
 import { getAllTagsApi } from "../../../redux/reducers/TagsReducer";
 import { mapTagListToOption } from "../../Admin/Product/ProductAdmin";
 import { getAllImportExportAPI } from "../../../redux/reducers/DataAccess";
+import { render } from "@testing-library/react";
 
 export default function ProductWarehouse(props) {
   const dispatch = useDispatch();
@@ -260,6 +261,20 @@ export default function ProductWarehouse(props) {
       sorter: (a, b) => a.quantity - b.quantity,
       sortDirections: ["descend", "ascend"],
     },
+    {
+      title: "Missing Quantity",
+      dataIndex: "missing",
+      key: "missing",
+      render: (text) => (
+        <p style={{ margin: 0 }}>
+          {text === 0 ? (
+            <Tag color="green">No missing quantity</Tag>
+          ) : (
+            <Tag color="red">{Number(text * (-1))} missing quantity</Tag>
+          )}
+        </p>
+      ),
+    }
   ];
 
   const importExportColumns = [

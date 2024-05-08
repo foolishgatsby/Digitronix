@@ -4,7 +4,7 @@ import {
   editProductApi,
   getAllProductNoPaging,
 } from "../../redux/reducers/ProductReducer";
-import { Col, Form, Input, Row, Select } from "antd";
+import { Col, Form, Input, Row, Select, Tag } from "antd";
 import { mapProductListToOption } from "./FormImportProduct";
 import { withFormik } from "formik";
 import { importExportProductAPI } from "../../redux/reducers/DataAccess";
@@ -46,13 +46,38 @@ function FormExportProduct(props) {
             <Select
               showSearch
               placeholder="Select product ID"
-              optionFilterProp="children"
+              optionFilterProp="label"
               filterOption={filterOption}
               onChange={(value, option) => {
                 setFieldValue("product_id", value);
                 setFieldValue("product_name", option.label);
+                setFieldValue("product_quantity_before", option.quantity);
               }}
-              options={mapProductListToOption(values.productList)}
+              options={values.productList?.map((product, index) => {
+                return {
+                  value: product.id,
+                  label: product.name,
+                  tags: product.tags,
+                  category_name: product.category_name,
+                  quantity: product.quantity,
+                }
+              })}
+              optionRender={(option) => {
+                return (
+                  <div>
+                    <span>{option.data.label}</span>
+                    <span> - </span>
+                    <span>{option.data.category_name}</span>
+                    <div>
+                      {option.data.tags.map((tag, index) => {
+                        return (
+                          <Tag key={index}>{tag.name}</Tag>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }}
             />
           </Form.Item>
         </Col>
@@ -94,7 +119,6 @@ const ExportProductFormik = withFormik({
       product_quantity_before: 0,
     };
   },
-
   handleSubmit: (values, { props }) => {
     console.log(values);
     const editProduct = {
