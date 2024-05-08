@@ -167,11 +167,13 @@ function FormAddProductionDetail(props) {
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item name="user_id" label="Select Worker">
-            <Select placeholder="Select worker">
+            <Select placeholder="Select worker" onChange={(value) => {
+              setFieldValue("user_id", value);
+            }}>
               {values.userList.filter((user) => user.role.id === ROLE.WORKER.id).map((user) => {
                 return (
                   <Select.Option key={user.id} value={user.id}>
-                    {user.name}
+                    {user.username}
                   </Select.Option>
                 );
               })}

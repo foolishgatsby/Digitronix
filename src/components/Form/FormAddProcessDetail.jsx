@@ -233,6 +233,7 @@ const AddProcessDetailFormik = withFormik({
     },
     handleSubmit: (values, { props }) => {
         // console.log(values)
+        console.log(values)
         props.dispatch(addProcessDetailApi(values))
     },
     displayName: 'AddProcessDetailForm',

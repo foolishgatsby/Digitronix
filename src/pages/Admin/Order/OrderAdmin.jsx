@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOrderAPI, getAllOrdersAPI } from "../../../redux/reducers/OrderReducer";
+import { deleteOrderAPI, getAllOrdersAPI, updateOrderAPI } from "../../../redux/reducers/OrderReducer";
 
 import style from "./OrderAdmin.module.css";
 import { useNavigate } from "react-router-dom";
@@ -62,6 +62,21 @@ export default function OrderAdmin(props) {
                         // dispatch(getOrderDetailsAPI(order.id));
                       },
                     },
+                    !(order.delivery_method === "Company Vehicle") && (order.status === "produced") ? {
+                      key: "Delivering Order",
+                      title: "Delivering Order",
+                      label: "Delivering Order",
+                      onClick: () => {
+                        dispatch(updateOrderAPI({ ...order, status: "on_delivery" }));
+                      }
+                    } : !(order.delivery_method === "Company Vehicle") && (order.status === "on_delivery") ? {
+                      key: "Done Order",
+                      title: "Done Order",
+                      label: "Done Order",
+                      onClick: () => {
+                        dispatch(updateOrderAPI({ ...order, status: "delivered" }));
+                      }
+                    } : null
                   ],
                 }}
               >

@@ -50,7 +50,7 @@ function FormAddDelivery(props) {
                     <Form.Item
                         rules={[{ required: true, message: 'Delivery Date is required' }]}
                         name='delivery_date' label='Delivery Date'>
-                        <DatePicker className='w-full' onChange={(date, dateString) => setFieldValue('delivery_date', dateString)} />
+                        <DatePicker showTime className='w-full' onChange={(date, dateString) => setFieldValue('delivery_date', dateString)} />
                     </Form.Item>
                 </Col>
             </Row>

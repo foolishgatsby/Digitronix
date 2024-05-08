@@ -533,18 +533,20 @@ export default function ProductDetails(props) {
               const data = _.sortBy(record.process_details, ["intensity"]);
               return (
                 <div>
-                  <button onClick={() => {
-                    dispatch(setProcessEdit(record));
-                    const action = {
-                      type: "ModalReducer/setModalOpen",
-                      title: "Add Process Detail",
-                      contentComponentType: "FormAddProcessDetail",
-                    }
-                    dispatch(action);
-                  }}
-                    className="btn btn-success">
-                    Create new process detail
-                  </button>
+                  {userLoginInfo?.roleId === ROLE.PRODUCTIONMANAGER.id ? (
+                    <button onClick={() => {
+                      dispatch(setProcessEdit(record));
+                      const action = {
+                        type: "ModalReducer/setModalOpen",
+                        title: "Add Process Detail",
+                        contentComponentType: "FormAddProcessDetail",
+                      }
+                      dispatch(action);
+                    }}
+                      className="btn btn-success">
+                      Create new process detail
+                    </button>
+                  ) : null}
                   <Table
                     pagination={{
                       hideOnSinglePage: true,

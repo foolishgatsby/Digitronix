@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { STATUS_CODE } from "../../utils/constants/settingSystem";
 import { deliveriesService } from "../services/DeliveriesService";
+import { setModalCancel } from "./ModalReducer";
 
 const initialState = {
   deliveriesList: [],
@@ -55,9 +56,11 @@ export const addDeliveryAPI = (data) => {
     try {
       const result = await deliveriesService.addDelivery(data);
       if (result.status === STATUS_CODE.SUCCESS) {
+        alert("Add delivery successfully!");
         dispatch(getDeliveryAPI());
       }
       dispatch(setDeliveriesListLoading(false));
+      dispatch(setModalCancel());
     } catch (error) {
       console.log("error", error);
       dispatch(setDeliveriesListLoading(false));

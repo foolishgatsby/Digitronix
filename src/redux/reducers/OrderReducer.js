@@ -117,6 +117,7 @@ export const getOrderDetailsAPI = (orderId) => {
 export const updateOrderAPI = (data) => {
   return async (dispatch) => {
     try {
+      console.log("data", data);
       const response = await orderService.updateOrder(data);
       if (response.status === STATUS_CODE.SUCCESS) {
         alert("Update order successfully");
